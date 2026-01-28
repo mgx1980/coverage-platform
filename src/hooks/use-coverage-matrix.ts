@@ -1,7 +1,14 @@
 import useSWR from 'swr';
 import type { FilterState, CoverageMatrixResponse } from '@/types/coverage';
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = async (url: string) => {
+  const res = await fetch(url);
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({}));
+    throw new Error(error.error || 'Failed to fetch');
+  }
+  return res.json();
+};
 
 function buildUrl(filterState: FilterState): string {
   const params = new URLSearchParams();

@@ -19,7 +19,7 @@ const DEFAULT_FILTER_STATE: FilterState = {
 
 export function CoverageDashboard() {
   const [filterState, setFilterState] = useState<FilterState>(DEFAULT_FILTER_STATE);
-  const { matrix, isLoading, isValidating } = useCoverageMatrix(filterState);
+  const { matrix, error, isLoading, isValidating } = useCoverageMatrix(filterState);
 
   const handleModeChange = (mode: FilterState['mode']) => {
     setFilterState({
@@ -29,6 +29,21 @@ export function CoverageDashboard() {
       selectedRegulationTypes: [],
     });
   };
+
+  if (error) {
+    return (
+      <Card>
+        <CardContent className="p-6">
+          <div className="text-center text-red-600">
+            <p className="font-medium">Failed to load coverage data</p>
+            <p className="text-sm text-gray-500 mt-1">
+              Check that DATABASE_URL is configured in Vercel environment variables
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
