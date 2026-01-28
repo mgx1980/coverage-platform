@@ -17,8 +17,9 @@ export async function GET() {
     return NextResponse.json(filters);
   } catch (error) {
     console.error('Error fetching coverage filters:', error);
+    const message = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { error: 'Failed to fetch coverage filters' },
+      { error: 'Failed to fetch coverage filters', details: message },
       { status: 500 }
     );
   }

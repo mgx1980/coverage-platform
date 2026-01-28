@@ -4,10 +4,11 @@ let pool: Pool | null = null;
 
 export function getPool(): Pool {
   if (!pool) {
+    const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
     pool = new Pool({
       connectionString: process.env.DATABASE_URL,
       max: 5,
-      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined,
+      ssl: isProduction ? { rejectUnauthorized: false } : undefined,
     });
   }
   return pool;
